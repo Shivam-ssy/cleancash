@@ -9,6 +9,7 @@ function App() {
   return (
     <div>
       {/* <h1 className='text-blue-600 bg-green-700'>hello to clean cl</h1> */}
+      {/* <h1 className='text-blue-600 bg-green-700'>hello to clean cl</h1> */}
     </div>
   )
 }
