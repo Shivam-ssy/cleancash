@@ -1,9 +1,13 @@
-import { ApiError } from "./ApiError.js"
 
-export const errorHandler= async (err,req,res, next)=>{
-    console.log(err.stack)
-    const statusCode= err.statusCode || 500
-    const message = err.message || "Something went wrong"
-
-    res.status(statusCode).json(new ApiError(statusCode,message))
-}
+export const errorHandler = (err, req, res, next) => {
+    console.error(err.stack); 
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Something went wrong";
+    const errors = err.errors || []; 
+    res.status(statusCode).json({
+        success: false,
+        statusCode,
+        message,
+        errors,
+    });
+};
