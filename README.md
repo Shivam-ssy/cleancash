@@ -1,5 +1,8 @@
 # CleanCash Backend API Documentation
 
+## Base URL
+**Live API:** [CleanCash API](https://cleancash.vercel.app/api/v1)
+
 ## Authentication Routes
 | Endpoint | Method | Middleware | Description |
 |----------|--------|------------|-------------|
@@ -33,7 +36,7 @@
 1. Clone the repository
 2. Install dependencies: `npm install`
 3. Setup environment variables in `.env`
-4. Start the server: `npm run start` or `npx nodemon index.js` for development.
+4. Start the server: `npm start` or `nodemon` for development.
 
 ---
 This documentation serves as a guide for backend API routes for CleanCash. 🚀
