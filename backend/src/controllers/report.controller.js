@@ -5,7 +5,7 @@ import { asyncHandler } from "../utility/asyncHandler.js";
 import { cloudinary, uploadToCloudinary } from "../utility/cloudinary.js";
 import { imageDetection } from "../utility/ImageDectection.js";
 
-export const createReport = asyncHandler(async (req,res)=>{
+export const createReport = asyncHandler(async (req,res, next)=>{
     const requestedUser= req.user
     const image= req.file
     const {description,pollutionType,city,locality,state} = req.body
@@ -46,7 +46,7 @@ export const createReport = asyncHandler(async (req,res)=>{
 
 })
 
-export const getReport = asyncHandler(async (req,res)=>{
+export const getReport = asyncHandler(async (req,res, next)=>{
     const reportId= req.params.id
     const report= await
     Report.findById(reportId)
@@ -59,7 +59,7 @@ export const getReport = asyncHandler(async (req,res)=>{
 }
 )
 
-export const getReports = asyncHandler(async (req,res)=>{
+export const getReports = asyncHandler(async (req,res, next)=>{
     const reports= await Report.find()
     .populate('reportedBy','name email')
     .populate('reviewedBy','name email')
@@ -70,7 +70,7 @@ export const getReports = asyncHandler(async (req,res)=>{
 }
 )
 
-export const updateReportStatus = asyncHandler(async (req,res)=>{
+export const updateReportStatus = asyncHandler(async (req,res, next)=>{
     const reportId= req.params.id
     const {reportStatus}= req.body
     const report = await Report.findById(reportId)
@@ -83,7 +83,7 @@ export const updateReportStatus = asyncHandler(async (req,res)=>{
     return res.status(200).json(new ApiResponse(200,report,"success"))
 })
 
-export const getReportByUser = asyncHandler(async (req,res)=>{
+export const getReportByUser = asyncHandler(async (req,res, next)=>{
     const requestedUser= req.user
     const reports= await Report.find({reportedBy:requestedUser._id})
     if (!reports) {
@@ -93,7 +93,7 @@ export const getReportByUser = asyncHandler(async (req,res)=>{
 }
 )
 
-export const getReportByOfficer = asyncHandler(async (req,res)=>{
+export const getReportByOfficer = asyncHandler(async (req,res, next)=>{
     const requestedUser= req.user
     const reports= await Report.find({reviewedBy:requestedUser._id})
     if (!reports) {
@@ -103,7 +103,7 @@ export const getReportByOfficer = asyncHandler(async (req,res)=>{
 }
 )
 
-export const assignReport = asyncHandler(async (req,res)=>{
+export const assignReport = asyncHandler(async (req,res, next)=>{
     const {reportId,requestedUser}= req.body
     const report= await Report.findById(reportId)
     if (!report) {
@@ -119,9 +119,12 @@ export const assignReport = asyncHandler(async (req,res)=>{
 }
 )
 
-export const getReportForOfficer = asyncHandler(async (req,res)=>{
+export const getReportForOfficer = asyncHandler(async (req,res, next)=>{
     const user= req.user
-    const reports= await Report.find({address:{city:user.city,state:user.state}})
+    const reports= await Report.find({$or: [
+        { "address.city": user.city, "address.state": user.state }, 
+        { reviewedBy: user._id }                                     
+    ]})
     if (!reports) {
         throw new ApiError(404, "Reports not found")
     }

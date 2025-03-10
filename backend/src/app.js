@@ -22,7 +22,13 @@ app.use(cors({
 app.use('/api/v1/users',userRouter)
 app.use('/api/v1/report',reportRouter)
 
+app.get('/',(req,res)=>{
+    res.status(200).json({status:200,data:null,message:"Welcome to the API of CleanCash"})
+})
 
+app.all('*',(req,res)=>{
+    res.status(404).json({status:404,data:null,message:"Route not found"})
+})
 //To handle all server error
 app.use(errorHandler)
 

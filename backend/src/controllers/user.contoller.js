@@ -40,7 +40,7 @@ const generateAccessTokenRefreshToken= async (userId)=>{
         throw new ApiError(500,"Something went wrong while generating the tokens")
     }
 }
-export const register = asyncHandler(async (req,res)=>{
+export const register = asyncHandler(async (req,res,next)=>{
     const {name,email,password}=req.body
 
     if (!name || !email || !password) {
@@ -78,7 +78,7 @@ export const register = asyncHandler(async (req,res)=>{
                 .json(new ApiResponse(201,createdUser,"User Created Successfully"))
 })
 
-export const verifyOtp = asyncHandler(async (req,res)=>{
+export const verifyOtp = asyncHandler(async (req,res,next)=>{
     const {email,otp,date}=req.body
     if (!email || !otp) {
         throw new ApiError(404, "Not get the otp or user")
@@ -118,7 +118,7 @@ export const verifyOtp = asyncHandler(async (req,res)=>{
 })
 
 
-export const generateOtp = asyncHandler(async (req,res)=>{
+export const generateOtp = asyncHandler(async (req,res,next)=>{
     const {email}=req.body
 
     if (!email) {
@@ -146,7 +146,7 @@ export const generateOtp = asyncHandler(async (req,res)=>{
     return res.status(200).json(new ApiResponse(200, null, "Opt generated successfully"))
 })
 // this is for the admins only 
-export const createAnyUser = asyncHandler(async (req,res)=>{
+export const createAnyUser = asyncHandler(async (req,res,next)=>{
     const {name,email,password,role}=req.body
 
     if (!name || !email || !password || !role) {
@@ -173,7 +173,7 @@ export const createAnyUser = asyncHandler(async (req,res)=>{
 })
 
 
-export const login = asyncHandler(async (req,res)=>{
+export const login = asyncHandler(async (req,res,next)=>{
     const {email,password}=req.body
 
     if (!email || !password) {
@@ -197,7 +197,7 @@ export const login = asyncHandler(async (req,res)=>{
     .json(new ApiResponse(200,logedInUser,"User Login Successfully"))
 })
 
-export const updateUserName = asyncHandler(async (req,res)=>{
+export const updateUserName = asyncHandler(async (req,res,next)=>{
     const user=req.user
     const {name}=req.body
     if (!user) {
@@ -222,7 +222,7 @@ export const updateUserName = asyncHandler(async (req,res)=>{
         throw new ApiError(500, "Something went wrong ")
     return res.status(200).json(new ApiResponse(200, null , "User updated successfully"))
 })
-export const logout= asyncHandler(async (req, res)=>{
+export const logout= asyncHandler(async (req, res, next)=>{
     await Users.findByIdAndUpdate(
         req.user._id,
         {
