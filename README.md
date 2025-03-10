@@ -1,7 +1,7 @@
 # CleanCash Backend API Documentation
 
 ## Base URL
-**Live API:** [CleanCash API](https://cleancash.vercel.app/api/v1)
+**Live API:** [CleanCash API](https://cleancash.vercel.app/)
 
 ## Authentication Routes
 | Endpoint | Method | Middleware | Description |
@@ -21,13 +21,32 @@
 | `/update-report/:id` | `PATCH` | `verifyJwt`, `verifyRole("officer")` | Update report status (Officer only) |
 | `/get-report-by-user` | `GET` | `verifyJwt` | Get reports associated with the logged-in user |
 | `/get-report-by-officer` | `GET` | `verifyJwt`, `verifyRole("officer")` | Get reports assigned to an officer |
-| `/assign-report/:id` | `PATCH` | `verifyJwt`, `verifyRole("admin")`, `verifyRole("officer")` | Assign a report to an officer |
+| `/assign-report/:id` | `POST` | `verifyJwt`, `verifyRole("admin")`, `verifyRole("officer")` | Assign a report to an officer |
 | `/get-report-for-officer` | `GET` | `verifyJwt`, `verifyRole("officer")` | Get reports assigned to an officer |
 
 ### Notes
 - All protected routes require `verifyJwt` middleware.
 - Role-based access control is enforced using `verifyRole(role)`. Admins and officers have specific permissions.
 - Image uploads in reports are handled via `upload.single("image")` middleware.
+
+
+
+**For User End Point**
+```
+https://cleancash.vercel.app/api/v1/users
+```
+- Example 
+```
+https://cleancash.vercel.app/api/v1/users/register
+```
+- it will create a user with name, email and password
+
+**For Report End Points**
+- Example 
+```
+https://cleancash.vercel.app/api/v1/report/create-report
+```
+- it will create a report with image, description, city, state, locality, pollutionType
 
 ## Error Handling
 - API uses a global error handler that returns structured error messages using `ApiError` class.
